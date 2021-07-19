@@ -1,0 +1,153 @@
+{
+	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+	"name": "PEMU",
+	"patterns": [
+		{
+			"include": "#instructions"
+		},
+		{
+			"include": "#compiler_instructions"
+		},
+		{
+			"include": "#comments"
+		},
+		{
+			"include": "#constants"
+		},
+		{
+			"include": "#labels"
+		},
+		{
+			"include": "#strings"
+		},
+		{
+			"include": "#characters"
+		},
+		{
+			"include": "#arrays"
+		},
+		{
+			"include": "#numbers"
+		},
+		{
+			"include": "#registers"
+		},
+		{
+			"include": "#offsets"
+		},
+		{
+			"include": "#pointers"
+		}
+	],
+	"repository": {
+		"instructions": {
+			"name": "entity.name.function",
+			"match": "\\b(NULL|BRK|DATA|XMOV|MOV|SWP|OUTI|OUTC|GETI|GETC|GETK|TS|TMS|INC|DEC|ADD|SUB|MUL|DIV|MOD|AND|OR|NOT|XOR|CMP|JMP|JC|JNC|JZ|JNZ|JE|JNE|JB|JNB|JBE|JNBE|JA|JNA|JAE|JNAE|CALL|RET|PUSH|POP|LOOP|HLT)\\s"
+		},
+		"compiler_instructions": {
+			"name": "keyword.control",
+			"match": "#(DW|DS|DA|INCLUDE)\\s"
+		},
+		"comments": {
+			"name": "comment.line",
+			"match": ";[^\\v]+"
+		},
+		"constants": {
+			"name": "support.class",
+			"match": "@\\w+"
+		},
+		"labels": {
+			"name": "meta.var",
+			"match": "\\b\\w+(:)",
+			"captures": {
+				"1": {
+					"name": "keyword.operator.assignment"
+				}
+			}
+		},
+		"strings": {
+			"name": "string.quoted.double",
+			"begin": "\"",
+			"end": "\"",
+			"patterns": [
+				{
+					"include": "#character_escapes"
+				}
+			]
+		},
+		"characters": {
+			"name": "string.quoted.single",
+			"match": "'(\\\\.|\\\\[0-9]+;?|[^\\\\])'",
+			"captures": {
+				"1": {
+					"patterns": [
+						{
+							"include": "#character_escapes"
+						}
+					]
+				}
+			}
+		},
+		"character_escapes": {
+			"name": "constant.character.escape",
+			"match": "\\\\[0-9]+;?|\\\\."
+		},
+		"arrays": {
+			"name": "meta.array.literal",
+			"begin": "\\{",
+			"end": "\\}",
+			"patterns": [
+				{
+					"include": "#comments"
+				},
+				{
+					"include": "#numbers"
+				},
+				{
+					"include": "#registers"
+				},
+				{
+					"include": "#characters"
+				},
+				{
+					"include": "#offsets"
+				},
+				{
+					"include": "#constants"
+				},
+				{
+					"include": "#labels"
+				},
+				{
+					"include": "#pointers"
+				}
+			]
+		},
+		"numbers": {
+			"name": "constant.numeric",
+			"match": "\\b(0b[01]+|[0-9]+|0x[0-9a-f]+)\\b"
+		},
+		"registers": {
+			"name": "keyword",
+			"match": "\\b(SP|IP|ZF|CF)\\b"
+		},
+		"offsets": {
+			"name": "meta.brace.square",
+			"begin": "\\[",
+			"end": "\\]",
+			"patterns": [
+				{
+					"include": "#numbers"
+				},
+				{
+					"include": "#constants"
+				}
+			]
+		},
+		"pointers": {
+			"name": "meta.var",
+			"match": "\\b\\w+\\b"
+		}
+	},
+	"scopeName": "source.pemu"
+}
