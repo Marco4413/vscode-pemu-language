@@ -1,0 +1,16 @@
+{
+    "iconDefinitions": {
+        "_pemu": {
+            "iconPath": "pemu.png"
+        },
+        "_pemu_lib": {
+            "iconPath": "pemulib.png"
+        }
+    },
+    "fileExtensions": {
+        "pemulib": "_pemu_lib"
+    },
+    "languageIds": {
+        "pemu": "_pemu",
+    }
+}
