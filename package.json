@@ -1,0 +1,40 @@
+{
+    "publisher": "hds536jhmk",
+    "name": "pemu-syntax-highlighting",
+    "displayName": "PEMU Syntax Highlighting",
+    "description": "An Extension which adds Syntax Highlighting for the PEMU Programming Language",
+    "version": "0.0.1",
+    "homepage": "https://github.com/hds536jhmk/vscode-pemu-language",
+    "license": "MIT",
+    "icon": "icon.png",
+    "author": {
+        "name": "hds536jhmk",
+        "url": "https://github.com/hds536jhmk"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/hds536jhmk/vscode-pemu-language.git"
+    },
+    "engines": {
+        "vscode": "^1.58.0"
+    },
+    "categories": [
+        "Programming Languages"
+    ],
+    "keywords": [
+        "pemu", "pemu language"
+    ],
+    "contributes": {
+        "languages": [{
+            "id": "pemu",
+            "aliases": ["PEMU", "pemu"],
+            "extensions": [".pemu",".pemulib"],
+            "configuration": "./language-configuration.json"
+        }],
+        "grammars": [{
+            "language": "pemu",
+            "scopeName": "source.pemu",
+            "path": "./syntaxes/pemu.tmLanguage.json"
+        }]
+    }
+}
