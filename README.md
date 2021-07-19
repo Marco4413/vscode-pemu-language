@@ -5,7 +5,7 @@
 
 ## Description:
 
-This is a language extension for VSCode that adds Syntax Highlighting for the PEMU Programming Language which is used by the [PEMU](https://github.com/hds536jhmk/ProcessorEmulator) application.
+This is a language extension for VSCode that adds support for the PEMU Programming Language which is used by the [PEMU](https://github.com/hds536jhmk/ProcessorEmulator) application.
 
 ## What's PEMU?
 
