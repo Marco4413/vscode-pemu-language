@@ -66,14 +66,24 @@
 			}
 		},
 		"strings": {
+			"comment": "Matches all strings with double quotes",
 			"name": "string.quoted.double",
-			"begin": "\"",
-			"end": "\"",
-			"patterns": [
-				{
-					"include": "#character_escapes"
+			"match": "(\")(?:[^\\\\\"]|(\\\\[0-9]+;?|\\\\.))*(\")",
+			"captures": {
+				"1": {
+					"name": "punctuation.definition.string.begin"
+				},
+				"2": {
+					"patterns": [
+						{
+							"include": "#character_escapes"
+						}
+					]
+				},
+				"3": {
+					"name": "punctuation.definition.string.end"
 				}
-			]
+			}
 		},
 		"characters": {
 			"name": "string.quoted.single",
@@ -96,6 +106,11 @@
 			"name": "meta.array.literal",
 			"begin": "\\{",
 			"end": "\\}",
+			"captures": {
+				"0": {
+					"name": "meta.brace.curly"
+				}
+			},
 			"patterns": [
 				{
 					"include": "#comments"
@@ -125,11 +140,37 @@
 		},
 		"numbers": {
 			"name": "constant.numeric",
-			"match": "\\b(0b[01]+|[0-9]+|0x[0-9a-f]+)\\b"
+			"patterns": [
+				{
+					"name": "constant.numeric.hex",
+					"match": "\\b0x[0-9a-f]+\\b"
+				},
+				{
+					"name": "constant.numeric.octal",
+					"match": "\\b0o[0-7]+\\b"
+				},
+				{
+					"name": "constant.numeric.binary",
+					"match": "\\b0b[01]+\\b"
+				},
+				{
+					"name": "constant.numeric.decimal",
+					"match": "\\b[0-9]+\\b"
+				}
+			]
 		},
 		"registers": {
 			"name": "keyword",
-			"match": "\\b(SP|IP|ZF|CF)\\b"
+			"patterns": [
+				{
+					"name": "keyword.register",
+					"match": "\\b(SP|IP)\\b"
+				},
+				{
+					"name": "keyword.flag",
+					"match": "\\b(ZF|CF)\\b"
+				}
+			]
 		},
 		"offsets": {
 			"name": "meta.brace.square",
@@ -146,7 +187,7 @@
 		},
 		"pointers": {
 			"name": "meta.var",
-			"match": "\\b\\w+\\b"
+			"match": "\\b[\\w\\-]+\\b"
 		}
 	},
 	"scopeName": "source.pemu"
