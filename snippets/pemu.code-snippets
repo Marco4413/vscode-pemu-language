@@ -4,11 +4,13 @@
         "description": "Creates Documentation for a PEMU Program",
         "body": [
             ";;",
-            " ; @Author: $1",
-            " ; @Description: $2",
-            " ; @License: ${3:MIT}",
-            " ; @Created-At   : ${4:DD}-${5:MM}-${6:YYYY}",
-            " ; @Last-Modified: ${7:DD}-${8:MM}-${9:YYYY}"
+            " ; @File",
+            " ; @Author: ${2:${TM_SELECTED_TEXT:My Name}}",
+            " ; @Name: ${3:$TM_FILENAME}",
+            " ; @Description: ${4:File Description}",
+            " ; @License: ${5|MIT,Apache-2.0,BSD-3-Clause,BSD-2-Clause,GPL,LGPL,MPL-2.0,CDDL-1.0,EPL-2.0,Other|}",
+            " ; @Created-At   : ${6:$CURRENT_DATE}-${7:$CURRENT_MONTH}-${8:$CURRENT_YEAR}",
+            " ; @Last-Modified: ${6:$CURRENT_DATE}-${7:$CURRENT_MONTH}-${8:$CURRENT_YEAR}"
         ]
     },
     "Document Requirements": {
@@ -17,9 +19,9 @@
         "body": [
             ";;",
             " ; @Processor-Requirements",
-            " ; @Min-Bits  : $1",
-            " ; @Min-Memory: $2",
-            " ; @Min-Clock : $3"
+            " ; @Min-Bits  : ${1|8,16,24|}",
+            " ; @Min-Memory: ${2:Min Memory To Run Properly}",
+            " ; @Min-Clock : ${3:Min Clock To Run Properly}"
         ]
     },
     "Document Constant": {
@@ -27,9 +29,9 @@
         "description": "Creates Documentation for a Constant",
         "body": [
             ";;",
-            " ; @Constant { ${1:Type} }",
-            " ; @Name: $2",
-            " ; @Description: $3"
+            " ; @Constant { ${1|Any,Number,Character,VirtualKey|} }",
+            " ; @Name: ${2:${TM_SELECTED_TEXT:Constant's Name}}",
+            " ; @Description: ${3:Constant's Description}"
         ]
     },
     "Document Library Setting": {
@@ -37,9 +39,9 @@
         "description": "Creates Documentation for a Library's Setting",
         "body": [
             ";;",
-            " ; @Library-Setting { ${1:Type} }",
-            " ; @Name: $2",
-            " ; @Description: $3"
+            " ; @Library-Setting { ${1|Any,Number,Character,VirtualKey|} }",
+            " ; @Name: ${2:${TM_SELECTED_TEXT:Setting's Name}}",
+            " ; @Description: ${3:Setting's Description}"
         ]
     },
     "Document Label": {
@@ -47,9 +49,9 @@
         "description": "Creates Documentation for a Label",
         "body": [
             ";;",
-            " ; @Label { ${1:Type} }",
-            " ; @Name: $2",
-            " ; @Description: $3"
+            " ; @Label { ${1|Any,Number,Character,VirtualKey,String,Function,Array_TypeName,Pointer_TypeName|} }",
+            " ; @Name: ${2:${TM_SELECTED_TEXT:Label's Name}}",
+            " ; @Description: ${3:Label's Description}"
         ]
     },
     "Document Function": {
@@ -58,11 +60,11 @@
         "body": [
             ";;",
             " ; @Function",
-            " ; @Name: $1",
-            " ; @Description: $2",
-            " ; @Arguments:",
-            " ; @${3:Argument_Name} { ${4:Type} }: ${5:Description}",
-            " ; @Returns { ${6:Return_Types} }: ${7:Description}"
+            " ; @Name: ${1:${TM_SELECTED_TEXT:Function's Name}}",
+            " ; @Description: ${2:Function's Description}",
+            " ; @Arguments",
+            " ; @${3:Argument_Name} { ${4|Any,Number,Character,VirtualKey,String,Function,Array_TypeName,Pointer_TypeName|} }: ${5:Argument's Description}",
+            " ; @Returns { ${6:Comma-Separated Return Types} }: ${7:Return Types' Description}"
         ]
     }
 }
