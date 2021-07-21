@@ -13,6 +13,6 @@ This is a language extension for VSCode that adds support for the PEMU Programmi
 
 ## Screenshots:
 
-![](./pemu-language-extension.verify-code.gif)
+![](https://raw.githubusercontent.com/hds536jhmk/vscode-pemu-language/master/pemu-language-extension.verify-code.gif)
 
-![](./pemu-language-extension.snippets.gif)
+![](https://raw.githubusercontent.com/hds536jhmk/vscode-pemu-language/master/pemu-language-extension.snippets.gif)
