@@ -121,7 +121,7 @@
 		"strings": {
 			"comment": "Matches all strings with double quotes",
 			"name": "string.quoted.double",
-			"match": "(\")(?:[^\\\\\"]|(\\\\[0-9]+;?|\\\\.))*(\")",
+			"match": "(\")((?:[^\\\\\"]|(?:\\\\[0-9]+;?|\\\\.))*)(\")",
 			"captures": {
 				"1": {
 					"name": "punctuation.definition.string.begin"
