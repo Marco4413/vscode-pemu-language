@@ -2,6 +2,22 @@
     "comments": {
         "lineComment": ";"
     },
+    "onEnterRules": [
+        {
+            "beforeText": ";;.*",
+            "action": {
+                "appendText": " ; ",
+                "indent": "none"
+            }
+        },
+        {
+            "beforeText": ";\\s+[^\\s].*",
+            "action": {
+                "appendText": "; ",
+                "indent": "none"
+            }
+        }
+    ],
     "brackets": [
         ["{", "}"],
         ["[", "]"]

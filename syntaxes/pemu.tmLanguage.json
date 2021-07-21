@@ -9,6 +9,9 @@
 			"include": "#compiler_instructions"
 		},
 		{
+			"include": "#docs"
+		},
+		{
 			"include": "#comments"
 		},
 		{
@@ -51,6 +54,56 @@
 		"comments": {
 			"name": "comment.line",
 			"match": ";[^\\v]+"
+		},
+		"docs": {
+			"name": "comment.block.documentation",
+			"begin": "^\\s*;;",
+			"while": "^\\s*;",
+			"patterns": [
+				{
+					"match": "(@)([\\w\\-]+)\\s*(?:(\\{)([^{}]+)?(\\}))?\\s*(:?)(.*)",
+					"captures": {
+						"1": {
+							"name": "punctuation.definition.block.tag"
+						},
+						"2": {
+							"name": "storage.type.class"
+						},
+						"3": {
+							"name": "punctuation.definition.bracket.curly.begin"
+						},
+						"4": {
+							"patterns": [
+								{
+									"name": "punctuation.separator.comma",
+									"match": ","
+								},
+								{
+									"name": "punctuation.separator",
+									"match": "\\|"
+								},
+								{
+									"name": "punctuation.separator",
+									"match": "&"
+								},
+								{
+									"name": "entity.name.type.instance",
+									"match": "[\\w\\-]+"
+								}
+							]
+						},
+						"5": {
+							"name": "punctuation.definition.bracket.curly.end"
+						},
+						"6": {
+							"name": "punctuation.definition.block.tag"
+						},
+						"7": {
+							"name": "string"
+						}
+					}
+				}
+			]
 		},
 		"constants": {
 			"name": "support.class",
@@ -106,12 +159,20 @@
 			"name": "meta.array.literal",
 			"begin": "\\{",
 			"end": "\\}",
-			"captures": {
+			"beginCaptures": {
 				"0": {
-					"name": "meta.brace.curly"
+					"name": "punctuation.definition.bracket.curly.begin"
+				}
+			},
+			"endCaptures": {
+				"0": {
+					"name": "punctuation.definition.bracket.curly.end"
 				}
 			},
 			"patterns": [
+				{
+					"include": "#docs"
+				},
 				{
 					"include": "#comments"
 				},

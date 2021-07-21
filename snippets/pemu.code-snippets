@@ -1,0 +1,68 @@
+{
+    "Document File": {
+        "prefix": "!doc_file",
+        "description": "Creates Documentation for a PEMU Program",
+        "body": [
+            ";;",
+            " ; @Author: $1",
+            " ; @Description: $2",
+            " ; @License: ${3:MIT}",
+            " ; @Created-At   : ${4:DD}-${5:MM}-${6:YYYY}",
+            " ; @Last-Modified: ${7:DD}-${8:MM}-${9:YYYY}"
+        ]
+    },
+    "Document Requirements": {
+        "prefix": "!doc_requirements",
+        "description": "Creates Documentation for a PEMU Program's Processor Requirements",
+        "body": [
+            ";;",
+            " ; @Processor-Requirements",
+            " ; @Min-Bits  : $1",
+            " ; @Min-Memory: $2",
+            " ; @Min-Clock : $3"
+        ]
+    },
+    "Document Constant": {
+        "prefix": "!doc_constant",
+        "description": "Creates Documentation for a Constant",
+        "body": [
+            ";;",
+            " ; @Constant { ${1:Type} }",
+            " ; @Name: $2",
+            " ; @Description: $3"
+        ]
+    },
+    "Document Library Setting": {
+        "prefix": "!doc_lib_setting",
+        "description": "Creates Documentation for a Library's Setting",
+        "body": [
+            ";;",
+            " ; @Library-Setting { ${1:Type} }",
+            " ; @Name: $2",
+            " ; @Description: $3"
+        ]
+    },
+    "Document Label": {
+        "prefix": "!doc_label",
+        "description": "Creates Documentation for a Label",
+        "body": [
+            ";;",
+            " ; @Label { ${1:Type} }",
+            " ; @Name: $2",
+            " ; @Description: $3"
+        ]
+    },
+    "Document Function": {
+        "prefix": "!doc_function",
+        "description": "Creates Documentation for a Function",
+        "body": [
+            ";;",
+            " ; @Function",
+            " ; @Name: $1",
+            " ; @Description: $2",
+            " ; @Arguments:",
+            " ; @${3:Argument_Name} { ${4:Type} }: ${5:Description}",
+            " ; @Returns { ${6:Return_Types} }: ${7:Description}"
+        ]
+    }
+}
