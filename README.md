@@ -9,8 +9,10 @@ This is a language extension for VSCode that adds support for the PEMU Programmi
 
 ## What's PEMU?
 
-[PEMU](https://github.com/hds536jhmk/ProcessorEmulator) is an application which Emulates a Processor written in the Java Programming Language.
+[PEMU](https://github.com/hds536jhmk/ProcessorEmulator) is a Java Swing Application that Emulates a Processor.
 
 ## Screenshots:
 
-![](./screenshot.png)
+![](./pemu-language-extension.verify-code.gif)
+
+![](./pemu-language-extension.snippets.gif)

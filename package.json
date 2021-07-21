@@ -3,10 +3,11 @@
     "name": "pemu-language-extension",
     "displayName": "PEMU Language Extension",
     "description": "An Extension which adds support for the PEMU Programming Language",
-    "version": "0.0.6",
+    "version": "0.1.0",
     "homepage": "https://github.com/hds536jhmk/vscode-pemu-language",
     "license": "MIT",
     "icon": "icon.png",
+    "main": "./pemu.js",
     "author": {
         "name": "hds536jhmk",
         "url": "https://github.com/hds536jhmk"
@@ -19,31 +20,87 @@
         "vscode": "^1.58.0"
     },
     "categories": [
-        "Programming Languages", "Snippets"
+        "Programming Languages",
+        "Snippets"
     ],
     "keywords": [
-        "pemu", "pemu language"
+        "pemu",
+        "pemu language"
+    ],
+    "activationEvents": [
+        "onCommand:pemu-language-extension.verifyCode"
     ],
     "contributes": {
-        "languages": [{
-            "id": "pemu",
-            "aliases": ["PEMU", "pemu"],
-            "extensions": [".pemu",".pemulib"],
-            "configuration": "./language-configuration.json"
-        }],
-        "grammars": [{
-            "language": "pemu",
-            "scopeName": "source.pemu",
-            "path": "./syntaxes/pemu.tmLanguage.json"
-        }],
-        "snippets": [{
+        "configuration": {
+            "title": "PEMU Language Extension",
+            "properties": {
+                "pemu-language-extension.javaPath": {
+                    "type": "string",
+                    "default": null,
+                    "description": "The Path to a JRE. If not set, the default JRE will be used."
+                },
+                "pemu-language-extension.pemuJarPath": {
+                    "type": "string",
+                    "default": null,
+                    "description": "The Path to the PEMU JAR Executable."
+                },
+                "pemu-language-extension.gotoError": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Redirects automatically to the error when verifying code."
+                }
+            }
+        },
+        "languages": [
+            {
+                "id": "pemu",
+                "aliases": [
+                    "PEMU",
+                    "pemu"
+                ],
+                "extensions": [
+                    ".pemu",
+                    ".pemulib"
+                ],
+                "configuration": "./language-configuration.json"
+            }
+        ],
+        "grammars": [
+            {
+                "language": "pemu",
+                "scopeName": "source.pemu",
+                "path": "./syntaxes/pemu.tmLanguage.json"
+            }
+        ],
+        "snippets": [
+            {
                 "language": "pemu",
                 "path": "./snippets/pemu.code-snippets"
-        }],
-        "iconThemes": [{
-            "id": "pemu",
-            "label": "PEMU",
-            "path": "./fileicons/pemu-icon-theme.json"
-        }]
+            }
+        ],
+        "commands": [
+            {
+                "command": "pemu-language-extension.verifyCode",
+                "title": "Verify PEMU Code"
+            }
+        ],
+        "menus": {
+            "commandPalette": [
+                {
+                    "command": "pemu-language-extension.verifyCode",
+                    "when": "editorLangId == pemu"
+                }
+            ]
+        },
+        "iconThemes": [
+            {
+                "id": "pemu",
+                "label": "PEMU",
+                "path": "./fileicons/pemu-icon-theme.json"
+            }
+        ]
+    },
+    "dependencies": {
+        "vscode": "^1.1.37"
     }
 }
