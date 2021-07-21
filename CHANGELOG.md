@@ -3,6 +3,20 @@
 
 All notable changes to the PEMU Language extension will be documented in this file.
 
+## [0.0.6]
+
+### Improved
+
+ - All PEMU Docs Snippets
+
+### Changed
+
+ - PEMU Docs Function and File Syntax
+
+### Fixed
+
+ - Some PEMU Docs' Tag (Color) Issues
+
 ## [0.0.5]
 
 ### Fixed
