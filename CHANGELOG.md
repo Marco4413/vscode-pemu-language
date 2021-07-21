@@ -1,7 +1,15 @@
 
 # Changelog
 
-All notable changes to the PEMU Language extension will be documented in this file.
+All notable changes to the PEMU Language Extension will be documented in this file.
+
+## [0.1.0]
+
+### Added
+
+ - PEMU App Integration
+ - Verify PEMU Code Command
+ - Various Settings
 
 ## [0.0.6]
 
