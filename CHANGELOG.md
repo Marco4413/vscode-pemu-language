@@ -3,6 +3,12 @@
 
 All notable changes to the PEMU Language extension will be documented in this file.
 
+## [0.0.5]
+
+### Fixed
+
+ - Multiple character escapes in a String having the wrong tag (color)
+
 ## [0.0.4]
 
 ### Added
