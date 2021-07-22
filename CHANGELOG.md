@@ -3,6 +3,23 @@
 
 All notable changes to the PEMU Language Extension will be documented in this file.
 
+## [0.2.0]
+
+### Added
+
+ - PEMU Commands:
+    - Open File
+    - Open
+ - statusBarButtons Setting
+
+### Changed
+
+ - **Some Ugly Code™** (It's still ugly, but **Less**)
+
+### Fixed
+
+ - Fixed some issues with Settings
+
 ## [0.1.0]
 
 ### Added
