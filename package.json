@@ -3,7 +3,7 @@
     "name": "pemu-language-extension",
     "displayName": "PEMU Language Extension",
     "description": "An Extension which adds support for the PEMU Programming Language",
-    "version": "0.1.1",
+    "version": "0.2.0",
     "homepage": "https://github.com/hds536jhmk/vscode-pemu-language",
     "license": "MIT",
     "icon": "icon.png",
@@ -28,7 +28,10 @@
         "pemu language"
     ],
     "activationEvents": [
-        "onCommand:pemu-language-extension.verifyCode"
+        "onCommand:pemu-language-extension.verifyCode",
+        "onCommand:pemu-language-extension.openFile",
+        "onCommand:pemu-language-extension.open",
+        "onLanguage:pemu"
     ],
     "contributes": {
         "configuration": {
@@ -36,18 +39,23 @@
             "properties": {
                 "pemu-language-extension.javaPath": {
                     "type": "string",
-                    "default": null,
+                    "default": "",
                     "description": "The Path to a JRE. If not set, the default JRE will be used."
                 },
                 "pemu-language-extension.pemuJarPath": {
                     "type": "string",
-                    "default": null,
+                    "default": "",
                     "description": "The Path to the PEMU JAR Executable."
                 },
                 "pemu-language-extension.gotoError": {
                     "type": "boolean",
                     "default": false,
                     "description": "Redirects automatically to the error when verifying code."
+                },
+                "pemu-language-extension.statusBarButtons": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Enables commands' status bar buttons."
                 }
             }
         },
@@ -81,7 +89,21 @@
         "commands": [
             {
                 "command": "pemu-language-extension.verifyCode",
-                "title": "Verify PEMU Code"
+                "category": "PEMU",
+                "title": "Verify Code",
+                "tooltip": "Verifies the Currently Open File using PEMU"
+            },
+            {
+                "command": "pemu-language-extension.openFile",
+                "category": "PEMU",
+                "title": "Open File",
+                "tooltip": "Opens the Currently Open File in PEMU"
+            },
+            {
+                "command": "pemu-language-extension.open",
+                "category": "PEMU",
+                "title": "Open",
+                "tooltip": "Opens PEMU"
             }
         ],
         "menus": {
@@ -89,6 +111,13 @@
                 {
                     "command": "pemu-language-extension.verifyCode",
                     "when": "editorLangId == pemu"
+                },
+                {
+                    "command": "pemu-language-extension.openFile",
+                    "when": "editorLangId == pemu"
+                },
+                {
+                    "command": "pemu-language-extension.open"
                 }
             ]
         },
