@@ -18,7 +18,7 @@ All notable changes to the PEMU Language Extension will be documented in this fi
 
 ### Fixed
 
- - Fixed some issues with Settings
+ - Some issues with Settings
 
 ## [0.1.0]
 
