@@ -117,17 +117,17 @@ let disposeOutputChannel;
 }
 
 /**
- * @param {String} output
+ * @param {Any} output
  * @param {Boolean} [preserveFocus]
  */
 const outputPrint = (output, preserveFocus) => {
     const channel = getOutputChannel();
-    channel.append(output.trimEnd() + "\n");
+    channel.append(new String(output).trimEnd() + "\n");
     channel.show(preserveFocus);
 }
 
 /**
- * @param {String} output
+ * @param {Any} output
  * @param {Boolean} [preserveFocus]
  */
 const outputClearPrint = (output, preserveFocus = true) => {
@@ -179,42 +179,78 @@ const getPEMUPath = () => {
     return null;
 }
 
-const COMMANDS = {
-    "verifyCode": async () => {
-        const javaPath = getJavaPath();
-        if (javaPath === null) {
-            outputClearPrint(EXTENSION_INVALID_JAVA_PATH);
-            return;
-        }
+/**
+ * @param {String?} [filePath]
+ * @param {String?} [bitCount]
+ * @param {Boolean} [execSync]
+ * @param {async (err: cp.ExecException?, stdout: String, stderr: String) => { }} [execOutput]
+ * @param {...String} [pemuArguments]
+ * @returns {Boolean}
+ */
+const runFileWithPEMU = async (filePath = undefined, bitCount = undefined, execSync = true, execOutput = async () => { }, ...pemuArguments) => {
+    const javaPath = getJavaPath();
+    if (javaPath === null) {
+        outputClearPrint(EXTENSION_INVALID_JAVA_PATH);
+        return false;
+    }
 
-        const jarPath = getPEMUPath();
-        if (jarPath === null) {
-            outputClearPrint(EXTENSION_INVALID_JAR_PATH);
-            return;
-        }
+    const jarPath = getPEMUPath();
+    if (jarPath === null) {
+        outputClearPrint(EXTENSION_INVALID_JAR_PATH);
+        return false;
+    }
 
+    if (filePath === undefined) {
         if (vscode.window.activeTextEditor === undefined) {
             outputClearPrint(EXTENSION_NO_FILE_OPEN);
-            return;
+            return false;
         }
-
+    
         const documentURI = vscode.window.activeTextEditor.document.uri;
         if (documentURI.scheme !== "file") {
             outputClearPrint(EXTENSION_UNSUPPORTED_URI_SCHEME);
-            return;
+            return false;
         }
+        filePath = documentURI.fsPath;
+    }
 
-        const bitCount = await vscode.window.showQuickPick(
+    if (bitCount === undefined) {
+        bitCount = await vscode.window.showQuickPick(
             PEMU_WORD_SIZES, { "canPickMany": false, "placeHolder": EXTENSION_WORD_SIZE_PICK }
         );
-        if (bitCount === undefined) return;
+        if (bitCount === undefined) return false;
+    }
+
+    let execString = "\"" + javaPath + "\" -jar \"" + jarPath + "\"";
+    if (filePath !== null) execString += " -p \"" + filePath + "\"";
+    if (bitCount !== null) execString += " -b " + bitCount;
+    if (pemuArguments.length > 0) execString += " " + pemuArguments.join(" ");
+
+    if (execSync) {
+        let stdout = "";
+        let stderr = "";
 
         try {
-            const stdout = cp.execSync(
-                "\"" + javaPath + "\" -jar \"" + jarPath + "\" -cl -sw -v -p \"" + documentURI.fsPath + "\" -b " + bitCount,
-                { "encoding": "utf-8", "stdio": "pipe" }
-            ).trim();
+            stdout = cp.execSync(execString, { "encoding": "utf-8", "stdio": "pipe" });
+        } catch (_stderr) {
+            stderr = _stderr;
+        }
 
+        await execOutput(null, stdout, stderr);
+    } else {
+        cp.exec(execString, execOutput);
+    }
+}
+
+const COMMANDS = {
+    "verifyCode": async () => {
+        await runFileWithPEMU(undefined, undefined, true, async (err, stdout, stderr) => {
+            if (stderr.length > 0) {
+                outputClearPrint(stderr);
+                return;
+            }
+
+            stdout = stdout.trim();
             const lines = stdout.split("\n");
             let pemuError = null;
 
@@ -246,49 +282,17 @@ const COMMANDS = {
                     pemuError.toString()
                 );
             }
-        } catch (stderr) {
-            outputClearPrint(stderr);
-        }
+        }, "-cl -sw -v")
     },
     "openFile": async (filePath) => {
-        const javaPath = getJavaPath();
-        if (javaPath === null) {
-            outputClearPrint(EXTENSION_INVALID_JAVA_PATH);
-            return;
-        }
-
-        const jarPath = getPEMUPath();
-        if (jarPath === null) {
-            outputClearPrint(EXTENSION_INVALID_JAR_PATH);
-            return;
-        }
-
-        if (filePath === undefined) {
-            if (vscode.window.activeTextEditor === undefined) {
-                outputClearPrint(EXTENSION_NO_FILE_OPEN);
-                return;
+        await runFileWithPEMU(filePath, null, false, async (err, stdout, stderr) => {
+            if (err !== null) {
+                outputClearPrint(err);
+                outputPrint(stderr);
+            } else if (stderr.length > 0) {
+                outputClearPrint(stderr);
             }
-
-            const documentURI = vscode.window.activeTextEditor.document.uri;
-            if (documentURI.scheme !== "file") {
-                outputClearPrint(EXTENSION_UNSUPPORTED_URI_SCHEME);
-                return;
-            }
-
-            filePath = documentURI.fsPath;
-        }
-
-        cp.exec(
-            "\"" + javaPath + "\" -jar \"" + jarPath + "\"" + (filePath === null ? "" : " -p \"" + filePath + "\""),
-            (err, stdout, stderr) => {
-                if (err !== null) {
-                    outputClearPrint(err);
-                    outputPrint(stderr);
-                } else if (stderr.length > 0) {
-                    outputClearPrint(stderr);
-                }
-            }
-        );
+        });
     },
     "open": async () => await COMMANDS.openFile(null)
 }
