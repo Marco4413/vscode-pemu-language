@@ -3,6 +3,12 @@
 
 All notable changes to the PEMU Language Extension will be documented in this file.
 
+## [0.3.0]
+
+### Improved
+
+ - Code to Open PEMU
+
 ## [0.2.0]
 
 ### Added
