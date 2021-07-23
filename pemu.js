@@ -12,6 +12,15 @@ const EXTENSION_NO_FILE_OPEN      = "Please open the file you want to perform th
 const EXTENSION_WORD_SIZE_PICK    = "Please pick the Processor's Word Size.";
 const EXTENSION_UNSUPPORTED_URI_SCHEME = "File's URI can only be of type \"file\".";
 
+const PEMU_UNSUPPORTED_COMMAND = `
+The specified command didn't give any output, maybe your PEMU version isn't up to date!
+You can check for a new version at the following link:
+ - https://github.com/hds536jhmk/ProcessorEmulator/releases
+
+If there isn't any new version then either there was an error (I highly doubt it, otherwise
+ this message wouldn't have shown) or the feature still needs to be put into an official release.
+If you can't live without it the only way is building from source.
+`.trim();
 const PEMU_LANGUAGE_ID = "pemu";
 const PEMU_WORD_SIZES = [ "8", "16", "24" ];
 const PEMU_UNKNOWN_FILE = "Unknown";
@@ -37,7 +46,7 @@ class PEMUError {
      * @returns {PEMUError?}
      */
     static createFromString(str) {
-        const matches = str.match(/'(.+)': (.+ Error) \((.+):(.+)\): (.+)/);
+        const matches = str.match(/^'(.+)': (.+ Error) \((.+):(.+)\): (.+)$/);
         if (matches === null) return null;
         return new PEMUError(
             matches[1], matches[2], matches[5],
@@ -183,7 +192,7 @@ const getPEMUPath = () => {
  * @param {String?} [filePath]
  * @param {String?} [bitCount]
  * @param {Boolean} [execSync]
- * @param {async (err: cp.ExecException?, stdout: String, stderr: String) => { }} [execOutput]
+ * @param {(err: cp.ExecException?, stdout: String, stderr: String) => Promise<Void>} [execOutput]
  * @param {...String} [pemuArguments]
  * @returns {Boolean}
  */
@@ -243,9 +252,13 @@ const runFileWithPEMU = async (filePath = undefined, bitCount = undefined, execS
 }
 
 const COMMANDS = {
-    "verifyCode": async () => {
-        await runFileWithPEMU(undefined, undefined, true, async (err, stdout, stderr) => {
-            if (stderr.length > 0) {
+    "verifyCode": async (obfuscate = false, bitCount = undefined) => {
+        await runFileWithPEMU(undefined, bitCount, true, async (err, stdout, stderr) => {
+            if (err !== null) {
+                outputClearPrint(err);
+                outputPrint(stderr);
+                return;
+            } else if (stderr.length > 0) {
                 outputClearPrint(stderr);
                 return;
             }
@@ -253,15 +266,16 @@ const COMMANDS = {
             stdout = stdout.trim();
             const lines = stdout.split("\n");
             let pemuError = null;
-
+            
             for (const line of lines) {
                 pemuError = PEMUError.createFromString(line);
                 if (pemuError !== null) break;
             }
-
+            
             if (pemuError === null) {
-                outputClearPrint(stdout);
+                outputClearPrint(stdout.length > 0 ? stdout : PEMU_UNSUPPORTED_COMMAND);
             } else {
+                const settings = vscode.workspace.getConfiguration(EXTENSION_NAME);
                 if (settings.get("gotoError")) {
                     const errorPos = pemuError.getPosition();
                     const fileName = pemuError.getFileName();
@@ -270,10 +284,10 @@ const COMMANDS = {
                         if (fileMatches.length > 0) {
                             const sourceFile = fileMatches[0];
                             const sourceDocument = await vscode.workspace.openTextDocument(sourceFile);
+                            
                             const textEditor = await vscode.window.showTextDocument(sourceDocument, false);
-                            textEditor.selections = [
-                                new vscode.Selection(errorPos, errorPos)
-                            ];
+                            textEditor.selections = [ new vscode.Selection(errorPos, errorPos) ];
+                            textEditor.revealRange(new vscode.Range(errorPos, errorPos), vscode.TextEditorRevealType.InCenter);
                         }
                     }
                 }
@@ -282,9 +296,10 @@ const COMMANDS = {
                     pemuError.toString()
                 );
             }
-        }, "-cl -sw -v")
+        }, "-cl -sw " + (obfuscate ? "-o" : "-v"));
     },
-    "openFile": async (filePath) => {
+    "obfuscateCode": async () => await COMMANDS.verifyCode(true, "24", PEMU_WORD_SIZES[PEMU_WORD_SIZES.length - 1]),
+    "openFile": async (filePath = undefined) => {
         await runFileWithPEMU(filePath, null, false, async (err, stdout, stderr) => {
             if (err !== null) {
                 outputClearPrint(err);
@@ -312,15 +327,15 @@ const getPackageCommand = (commandID) => {
  */
 
 /**
- * @type {{item: vscode.StatusBarItem, lang: String|undefined}[]}
+ * @type {{item: vscode.StatusBarItem,condition: (textEditor: vscode.TextEditor | undefined, settings: vscode.WorkspaceConfiguration) => Boolean}[]}
  */
 const STATUS_BAR_ITEMS = [ ];
 
 /**
- * @param {String?} [languageID] If null the item will always be shown
+ * @param {(textEditor: vscode.TextEditor | undefined, settings: vscode.WorkspaceConfiguration) => Boolean} [condition]
  * @param {StatusBarItemOptions} [options]
  */
-const addStatusBarItem = (languageID, options = { }) => {
+const addStatusBarItem = (condition = () => true, options = { }) => {
     const statusBarItem = vscode.window.createStatusBarItem(options.alignment, options.priority);
     if (options.color !== undefined)
         statusBarItem.color = options.color;
@@ -330,11 +345,9 @@ const addStatusBarItem = (languageID, options = { }) => {
         statusBarItem.text = options.text;
     if (options.tooltip !== undefined)
         statusBarItem.tooltip = options.tooltip;
+    
     STATUS_BAR_ITEMS.push(
-        {
-            "item": statusBarItem,
-            "lang": languageID
-        }
+        { "item": statusBarItem, condition }
     );
 }
 
@@ -342,18 +355,13 @@ const addStatusBarItem = (languageID, options = { }) => {
  * @param {vscode.TextEditor} [editor]
  */
 const updateItems = editor => {
-    const hideAll = !vscode.workspace.getConfiguration(EXTENSION_NAME).get("statusBarButtons");
+    const settings = vscode.workspace.getConfiguration(EXTENSION_NAME);
+    const hideAll = !settings.get("statusBarButtons");
     for (const barItem of STATUS_BAR_ITEMS) {
-        if (hideAll) {
+        if (hideAll || !barItem.condition(editor, settings)) {
             barItem.item.hide();
-        } else if (barItem.lang === null) {
-            barItem.item.show();
-        } else if (editor === undefined) {
-            barItem.item.hide();
-        } else if (barItem.lang === undefined || barItem.lang === editor.document.languageId) {
-            barItem.item.show();
         } else {
-            barItem.item.hide();
+            barItem.item.show();
         }
     }
 }
@@ -379,6 +387,16 @@ const registerStatusBarItems = (context) => {
 }
 
 /**
+ * 
+ * @param {vscode.TextEditor} [editor]
+ * @param {String} langID
+ * @returns {Boolean}
+ */
+function isLanguage(editor, langID) {
+    return editor !== undefined && editor.document.languageId === langID;
+}
+
+/**
  * @param {vscode.ExtensionContext} context
  */
 function activate(context) {
@@ -391,18 +409,27 @@ function activate(context) {
     }
 
     const verifyCode = getPackageCommand(EXTENSION_NAME + ".verifyCode");
+    const obfuscateCode = getPackageCommand(EXTENSION_NAME + ".obfuscateCode");
     const openFile = getPackageCommand(EXTENSION_NAME + ".openFile");
     const open = getPackageCommand(EXTENSION_NAME + ".open");
 
-    addStatusBarItem(PEMU_LANGUAGE_ID, {
+    addStatusBarItem((e, s) => s.get("verifyCodeStatusBarButton") && isLanguage(e, PEMU_LANGUAGE_ID), {
         "alignment": vscode.StatusBarAlignment.Right,
         "command": verifyCode.command,
-        "priority": 2,
+        "priority": 3,
         "text": verifyCode.category + ": " + verifyCode.title,
         "tooltip": verifyCode.tooltip
     });
 
-    addStatusBarItem(PEMU_LANGUAGE_ID, {
+    addStatusBarItem((e, s) => s.get("obfuscateCodeStatusBarButton") && isLanguage(e, PEMU_LANGUAGE_ID), {
+        "alignment": vscode.StatusBarAlignment.Right,
+        "command": obfuscateCode.command,
+        "priority": 2,
+        "text": obfuscateCode.category + ": " + obfuscateCode.title,
+        "tooltip": obfuscateCode.tooltip
+    });
+
+    addStatusBarItem((e, s) => s.get("openFileStatusBarButton") && isLanguage(e, PEMU_LANGUAGE_ID), {
         "alignment": vscode.StatusBarAlignment.Right,
         "command": openFile.command,
         "priority": 1,
@@ -410,7 +437,7 @@ function activate(context) {
         "tooltip": openFile.tooltip
     });
 
-    addStatusBarItem(null, {
+    addStatusBarItem((e, s) => s.get("openStatusBarButton"), {
         "alignment": vscode.StatusBarAlignment.Right,
         "command": open.command,
         "priority": 0,

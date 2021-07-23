@@ -29,6 +29,7 @@
     ],
     "activationEvents": [
         "onCommand:pemu-language-extension.verifyCode",
+        "onCommand:pemu-language-extension.obfuscateCode",
         "onCommand:pemu-language-extension.openFile",
         "onCommand:pemu-language-extension.open",
         "onLanguage:pemu"
@@ -55,7 +56,27 @@
                 "pemu-language-extension.statusBarButtons": {
                     "type": "boolean",
                     "default": true,
-                    "description": "Enables commands' status bar buttons."
+                    "description": "Enables Commands' status bar buttons."
+                },
+                "pemu-language-extension.verifyCodeStatusBarButton": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Enables Verify Code Command's status bar button."
+                },
+                "pemu-language-extension.obfuscateCodeStatusBarButton": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Enables Obfuscate Code Command's status bar button."
+                },
+                "pemu-language-extension.openFileStatusBarButton": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Enables Open File Command's status bar button."
+                },
+                "pemu-language-extension.openStatusBarButton": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Enables Open Command's status bar button."
                 }
             }
         },
@@ -94,6 +115,12 @@
                 "tooltip": "Verifies the Currently Open File using PEMU"
             },
             {
+                "command": "pemu-language-extension.obfuscateCode",
+                "category": "PEMU",
+                "title": "Obfuscate Code",
+                "tooltip": "Obfuscates the Currently Open File using PEMU"
+            },
+            {
                 "command": "pemu-language-extension.openFile",
                 "category": "PEMU",
                 "title": "Open File",
@@ -110,6 +137,10 @@
             "commandPalette": [
                 {
                     "command": "pemu-language-extension.verifyCode",
+                    "when": "editorLangId == pemu"
+                },
+                {
+                    "command": "pemu-language-extension.obfuscateCode",
                     "when": "editorLangId == pemu"
                 },
                 {

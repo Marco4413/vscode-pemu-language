@@ -5,9 +5,17 @@ All notable changes to the PEMU Language Extension will be documented in this fi
 
 ## [0.3.0]
 
+### Added
+
+ - PEMU Commands:
+    - Obfuscate Code
+ - More Settings to Toggle Individual Commands from the Status Bar
+ - Missing Feature Message (Will be shown if the command didn't give any output)
+
 ### Improved
 
  - Code to Open PEMU
+ - Code to Determine if a Status Bar Item should be shown
 
 ## [0.2.0]
 
