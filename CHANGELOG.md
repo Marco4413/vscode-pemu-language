@@ -3,6 +3,12 @@
 
 All notable changes to the PEMU Language Extension will be documented in this file.
 
+## [0.4.0]
+
+### Changed
+
+ - When Verifying or Obfuscating code, PEMU config won't be saved anymore
+
 ## [0.3.1]
 
 ### Added

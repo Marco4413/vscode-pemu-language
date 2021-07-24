@@ -299,7 +299,7 @@ const COMMANDS = {
                     pemuError.toString()
                 );
             }
-        }, "-cl -sw " + (obfuscate ? "-o" : "-v"));
+        }, "-cl -sw -ncas " + (obfuscate ? "-o" : "-v"));
     },
     "obfuscateCode": async () => await COMMANDS.verifyCode(true, "24", PEMU_WORD_SIZES[PEMU_WORD_SIZES.length - 1]),
     "openFile": async (filePath = undefined) => {
