@@ -3,6 +3,16 @@
 
 All notable changes to the PEMU Language Extension will be documented in this file.
 
+## [0.3.1]
+
+### Added
+
+ - Setting to specify Goto Error's Reveal Type
+
+### Changed
+
+ - Extension's Icon
+
 ## [0.3.0]
 
 ### Added
