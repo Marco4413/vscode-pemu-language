@@ -3,7 +3,7 @@
     "name": "pemu-language-extension",
     "displayName": "PEMU Language Extension",
     "description": "An Extension which adds support for the PEMU Programming Language",
-    "version": "0.3.0",
+    "version": "0.3.1",
     "homepage": "https://github.com/hds536jhmk/vscode-pemu-language",
     "license": "MIT",
     "icon": "icon.png",
@@ -52,6 +52,12 @@
                     "type": "boolean",
                     "default": false,
                     "description": "Redirects automatically to the error when verifying code."
+                },
+                "pemu-language-extension.gotoErrorRevealType": {
+                    "type": "string",
+                    "enum": [ "Default", "At Top", "In Center", "In Center If Outside Viewport" ],
+                    "default": "Default",
+                    "description": "The reveal type of Goto Error."
                 },
                 "pemu-language-extension.statusBarButtons": {
                     "type": "boolean",

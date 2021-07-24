@@ -287,7 +287,10 @@ const COMMANDS = {
                             
                             const textEditor = await vscode.window.showTextDocument(sourceDocument, false);
                             textEditor.selections = [ new vscode.Selection(errorPos, errorPos) ];
-                            textEditor.revealRange(new vscode.Range(errorPos, errorPos), vscode.TextEditorRevealType.InCenter);
+                            textEditor.revealRange(
+                                new vscode.Range(errorPos, errorPos),
+                                vscode.TextEditorRevealType[settings.get("gotoErrorRevealType").replace(/\s+/, "")]
+                            );
                         }
                     }
                 }
