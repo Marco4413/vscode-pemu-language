@@ -4,6 +4,18 @@ const cp = require("child_process");
 const fs = require("fs");
 const PACKAGE = require("./package.json");
 
+// Version 1.11.0 doesn't really support all the latest features, but I'll still
+//  keep it here until a new PEMU version drops
+
+// [ MIN_VER, MAX_VER ]
+// Planning to not break anything until 1.13.0, don't even know if we'll get there
+const EXTENSION_SUPPORTED_PEMU_VERSIONS = [ "1.11.0", "1.12.99" ];
+const EXTENSION_LOW_VERSION = "The PEMU version in use is old (\"v{0}\"), and not supported, please update it to \"v{1}\"";
+const EXTENSION_HIGH_VERSION = `
+The PEMU version in use is new (\"v{0}\"), and not supported by this version of the
+extension (Max version: \"v{1}\"), please update the extension or use an older version.
+`.trim();
+
 const EXTENSION_NAME = PACKAGE.name;
 const EXTENSION_DISPLAY_NAME = PACKAGE.displayName;
 const EXTENSION_INVALID_JAVA_PATH = "Java couldn't be found, please set its path in the Extension's Settings.";
@@ -146,6 +158,18 @@ const outputClearPrint = (output, preserveFocus = true) => {
 }
 
 /**
+ * @param {String} str
+ * @param {...Any} formats
+ * @returns {String}
+ */
+ const formatString = (str, ...formats) => {
+    for (let i = 0; i < formats.length; i++) {
+        str = str.replace("{" + i + "}", formats[i]);
+    }
+    return str;
+}
+
+/**
  * @param {String?} path
  * @returns {Boolean}
  */
@@ -251,8 +275,53 @@ const runFileWithPEMU = async (filePath = undefined, bitCount = undefined, execS
     }
 }
 
+/**
+ * @param {String} v1
+ * @param {String} v2
+ * @returns {Number}
+ */
+const compareVersions = (v1, v2) => {
+    const detailedV1 = v1.split(/\./).map(v => Number.parseInt(v));
+    const detailedV2 = v2.split(/\./).map(v => Number.parseInt(v));
+
+    const length = Math.max(detailedV1.length, detailedV2.length);
+    for (let i = 0; i < length; i++) {
+        const d1 = i < detailedV1.length ? detailedV1[i] : 0;
+        const d2 = i < detailedV2.length ? detailedV2[i] : 0;
+        if (d1 > d2) return 1;
+        else if (d1 < d2) return -1;
+    }
+    return 0;
+}
+
+/**
+ * @returns {Boolean}
+ */
+const checkPEMUVersion = async () => {
+    let isValid = false;
+    await runFileWithPEMU(null, null, true, async (err, stdout, stderr) => {
+        const versionMatch = stdout.trim().match(/^.*"(.+)"$/);
+        if (versionMatch === null) return;
+
+        const currentVersion = versionMatch[1];
+        const minVersion = EXTENSION_SUPPORTED_PEMU_VERSIONS[0];
+        const maxVersion = EXTENSION_SUPPORTED_PEMU_VERSIONS[1];
+        if (compareVersions(currentVersion, minVersion) < 0) {
+            outputClearPrint(formatString(EXTENSION_LOW_VERSION, currentVersion, minVersion));
+            return;
+        } else if (compareVersions(currentVersion, maxVersion) > 0) {
+            outputClearPrint(formatString(EXTENSION_HIGH_VERSION, currentVersion, maxVersion));
+            return;
+        }
+        isValid = true;
+    }, "-ver");
+    return isValid;
+}
+
 const COMMANDS = {
     "verifyCode": async (obfuscate = false, bitCount = undefined) => {
+        if (!await checkPEMUVersion()) return;
+
         await runFileWithPEMU(undefined, bitCount, true, async (err, stdout, stderr) => {
             if (err !== null) {
                 outputClearPrint(err);
@@ -303,6 +372,7 @@ const COMMANDS = {
     },
     "obfuscateCode": async () => await COMMANDS.verifyCode(true, "24", PEMU_WORD_SIZES[PEMU_WORD_SIZES.length - 1]),
     "openFile": async (filePath = undefined) => {
+        if (!await checkPEMUVersion()) return;
         await runFileWithPEMU(filePath, null, false, async (err, stdout, stderr) => {
             if (err !== null) {
                 outputClearPrint(err);
