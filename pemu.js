@@ -4,16 +4,18 @@ const cp = require("child_process");
 const fs = require("fs");
 const PACKAGE = require("./package.json");
 
-// Version 1.11.0 doesn't really support all the latest features, but I'll still
-//  keep it here until a new PEMU version drops
-
 // [ MIN_VER, MAX_VER ]
 // Planning to not break anything until 1.13.0, don't even know if we'll get there
-const EXTENSION_SUPPORTED_PEMU_VERSIONS = [ "1.11.0", "1.12.99" ];
-const EXTENSION_LOW_VERSION = "The PEMU version in use is old (\"v{0}\"), and not supported, please update it to \"v{1}\"";
+const EXTENSION_SUPPORTED_PEMU_VERSIONS = [ "1.11.5", "1.12.99" ];
+
+const PEMU_RELEASES_PAGE = "https://github.com/hds536jhmk/ProcessorEmulator/releases";
+const EXTENSION_LOW_VERSION = `
+The PEMU version in use is old ({0}), and not supported, please update it to {1}
+ - ${PEMU_RELEASES_PAGE}
+`.trim();
 const EXTENSION_HIGH_VERSION = `
-The PEMU version in use is new (\"v{0}\"), and not supported by this version of the
-extension (Max version: \"v{1}\"), please update the extension or use an older version.
+The PEMU version in use is new ({0}), and not supported by this version of the
+extension (Max version: {1}), please update the extension or use an older PEMU version.
 `.trim();
 
 const EXTENSION_NAME = PACKAGE.name;
@@ -27,7 +29,7 @@ const EXTENSION_UNSUPPORTED_URI_SCHEME = "File's URI can only be of type \"file\
 const PEMU_UNSUPPORTED_COMMAND = `
 The specified command didn't give any output, maybe your PEMU version isn't up to date!
 You can check for a new version at the following link:
- - https://github.com/hds536jhmk/ProcessorEmulator/releases
+ - ${PEMU_RELEASES_PAGE}
 
 If there isn't any new version then either there was an error (I highly doubt it, otherwise
  this message wouldn't have shown) or the feature still needs to be put into an official release.
