@@ -3,7 +3,7 @@
     "name": "pemu-language-extension",
     "displayName": "PEMU Language Extension",
     "description": "An Extension which adds support for the PEMU Programming Language",
-    "version": "0.3.1",
+    "version": "0.4.0",
     "homepage": "https://github.com/hds536jhmk/vscode-pemu-language",
     "license": "MIT",
     "icon": "icon.png",
