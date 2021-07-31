@@ -3,11 +3,11 @@
     "name": "pemu-language-extension",
     "displayName": "PEMU Language Extension",
     "description": "An Extension which adds support for the PEMU Programming Language",
-    "version": "0.4.0",
+    "version": "0.5.0",
     "homepage": "https://github.com/hds536jhmk/vscode-pemu-language",
     "license": "MIT",
     "icon": "icon.png",
-    "main": "./pemu.js",
+    "main": "./index.js",
     "author": {
         "name": "hds536jhmk",
         "url": "https://github.com/hds536jhmk"
@@ -97,20 +97,58 @@
                     ".pemu",
                     ".pemulib"
                 ],
-                "configuration": "./language-configuration.json"
+                "configuration": "./languages/pemu.json"
+            },
+            {
+                "id": "pemu_plugin_info",
+                "aliases": [
+                    "PEMU Plugin Info"
+                ],
+                "filenames": [
+                    "plugin.info"
+                ],
+                "configuration": "./languages/pemu_keyvaluedata.json"
+            },
+            {
+                "id": "pemu_lang",
+                "aliases": [
+                    "PEMU Language File"
+                ],
+                "extensions": [
+                    ".lang"
+                ],
+                "configuration": "./languages/pemu_keyvaluedata.json"
             }
         ],
         "grammars": [
             {
                 "language": "pemu",
                 "scopeName": "source.pemu",
-                "path": "./syntaxes/pemu.tmLanguage.json"
+                "path": "./languages/pemu.syntax.json"
+            },
+            {
+                "language": "pemu_plugin_info",
+                "scopeName": "source.pemu.keyvaluedata",
+                "path": "./languages/pemu_keyvaluedata.syntax.json"
+            },
+            {
+                "language": "pemu_lang",
+                "scopeName": "source.pemu.keyvaluedata",
+                "path": "./languages/pemu_keyvaluedata.syntax.json"
             }
         ],
         "snippets": [
             {
                 "language": "pemu",
-                "path": "./snippets/pemu.code-snippets"
+                "path": "./snippets/pemu.json"
+            },
+            {
+                "language": "pemu_plugin_info",
+                "path": "./snippets/pemu_plugin_info.json"
+            },
+            {
+                "language": "pemu_lang",
+                "path": "./snippets/pemu_lang.json"
             }
         ],
         "commands": [
@@ -162,7 +200,7 @@
             {
                 "id": "pemu",
                 "label": "PEMU",
-                "path": "./fileicons/pemu-icon-theme.json"
+                "path": "./fileicons/pemu_icon_theme.json"
             }
         ]
     },

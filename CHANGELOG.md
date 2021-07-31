@@ -3,6 +3,16 @@
 
 All notable changes to the PEMU Language Extension will be documented in this file.
 
+## [0.5.0]
+
+### Added
+
+ - Support for PEMU language and plugin.info files
+
+### Changed
+
+ - Extension's Layout
+
 ## [0.4.0]
 
 ### Added
