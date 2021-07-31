@@ -1,0 +1,10 @@
+{
+    "Basic Language File": {
+        "prefix": "!lang_file",
+        "description": "Adds Basic Key-Value Pairs for a Language File",
+        "body": [
+            "\"_shortName\" = \"${1:short_language_name}-${2:short_country}\"",
+            "\"_longName\" = \"${3:Language Name} - ${4:Country}\""
+        ]
+    }
+}

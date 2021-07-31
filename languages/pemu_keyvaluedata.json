@@ -1,0 +1,22 @@
+{
+    "comments": {
+        "lineComment": "#"
+    },
+    "onEnterRules": [
+        {
+            "beforeText": "#\\s+[^\\s].*",
+            "action": {
+                "appendText": "# ",
+                "indent": "none"
+            }
+        }
+    ],
+    "autoClosingPairs": [
+        ["\"", "\""],
+        ["'", "'"]
+    ],
+    "surroundingPairs": [
+        ["\"", "\""],
+        ["'", "'"]
+    ]
+}
