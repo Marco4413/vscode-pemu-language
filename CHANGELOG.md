@@ -3,6 +3,17 @@
 
 All notable changes to the PEMU Language Extension will be documented in this file.
 
+## [0.6.0]
+
+### Added
+
+ - Setting to specify extra PEMU arguments, used to change language/plugin
+
+### Changed
+
+ - When running PEMU the extension will log the command it used to run it
+ - Output will no longer take focus by default when written to
+
 ## [0.5.0]
 
 ### Added

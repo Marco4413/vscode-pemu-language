@@ -3,7 +3,7 @@
     "name": "pemu-language-extension",
     "displayName": "PEMU Language Extension",
     "description": "An Extension which adds support for the PEMU Programming Language",
-    "version": "0.5.0",
+    "version": "0.6.0",
     "homepage": "https://github.com/hds536jhmk/vscode-pemu-language",
     "license": "MIT",
     "icon": "icon.png",
@@ -47,6 +47,11 @@
                     "type": "string",
                     "default": "",
                     "description": "The Path to the PEMU JAR Executable."
+                },
+                "pemu-language-extension.pemuArguments": {
+                    "type": "string",
+                    "default": "--plugin \"io.github.hds.pemu:default_processor\" --language \"en-us\"",
+                    "description": "Arguments to be used when running PEMU, use this only to change active language or plugin."
                 },
                 "pemu-language-extension.gotoError": {
                     "type": "boolean",
