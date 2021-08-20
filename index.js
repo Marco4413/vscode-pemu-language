@@ -6,7 +6,7 @@ const PACKAGE = require("./package.json");
 
 // [ MIN_VER, MAX_VER ]
 // Planning to not break anything until 1.13.0, don't even know if we'll get there
-const EXTENSION_SUPPORTED_PEMU_VERSIONS = [ "1.11.5", "1.12.99" ];
+const EXTENSION_SUPPORTED_PEMU_VERSIONS = [ "1.12.0", "1.12.99" ];
 
 const PEMU_RELEASES_PAGE = "https://github.com/hds536jhmk/ProcessorEmulator/releases";
 const EXTENSION_LOW_VERSION = `
@@ -16,6 +16,9 @@ The PEMU version in use is old ({0}), and not supported, please update it to {1}
 const EXTENSION_HIGH_VERSION = `
 The PEMU version in use is new ({0}), and not supported by this version of the
 extension (Max version: {1}), please update the extension or use an older PEMU version.
+`.trim();
+const EXTENSION_VALID_VERSION = `
+The PEMU version in use ({0}) is compatible with this version of the plugin.
 `.trim();
 
 const EXTENSION_NAME = PACKAGE.name;
@@ -143,7 +146,7 @@ let disposeOutputChannel;
  * @param {Any} output
  * @param {Boolean} [preserveFocus]
  */
-const outputPrint = (output, preserveFocus) => {
+const outputPrint = (output, preserveFocus = true) => {
     const channel = getOutputChannel();
     channel.append(new String(output).trimEnd() + "\n");
     channel.show(preserveFocus);
@@ -256,11 +259,16 @@ const runFileWithPEMU = async (filePath = undefined, bitCount = undefined, execS
         if (bitCount === undefined) return false;
     }
 
+    const settings = vscode.workspace.getConfiguration(EXTENSION_NAME);
+    const defaultArguments = settings.get("pemuArguments");
+
     let execString = "\"" + javaPath + "\" -jar \"" + jarPath + "\"";
+    if (defaultArguments.length > 0) execString += " " + defaultArguments;
     if (filePath !== null) execString += " -p \"" + filePath + "\"";
     if (bitCount !== null) execString += " -b " + bitCount;
     if (pemuArguments.length > 0) execString += " " + pemuArguments.join(" ");
 
+    outputClearPrint(execString + "\n");
     if (execSync) {
         let stdout = "";
         let stderr = "";
@@ -309,12 +317,12 @@ const checkPEMUVersion = async () => {
         const minVersion = EXTENSION_SUPPORTED_PEMU_VERSIONS[0];
         const maxVersion = EXTENSION_SUPPORTED_PEMU_VERSIONS[1];
         if (compareVersions(currentVersion, minVersion) < 0) {
-            outputClearPrint(formatString(EXTENSION_LOW_VERSION, currentVersion, minVersion));
+            outputPrint(formatString(EXTENSION_LOW_VERSION, currentVersion, minVersion));
             return;
         } else if (compareVersions(currentVersion, maxVersion) > 0) {
-            outputClearPrint(formatString(EXTENSION_HIGH_VERSION, currentVersion, maxVersion));
+            outputPrint(formatString(EXTENSION_HIGH_VERSION, currentVersion, maxVersion));
             return;
-        }
+        } else outputPrint(formatString(EXTENSION_VALID_VERSION, currentVersion));
         isValid = true;
     }, "-ver");
     return isValid;
@@ -326,11 +334,11 @@ const COMMANDS = {
 
         await runFileWithPEMU(undefined, bitCount, true, async (err, stdout, stderr) => {
             if (err !== null) {
-                outputClearPrint(err);
+                outputPrint(err);
                 outputPrint(stderr);
                 return;
             } else if (stderr.length > 0) {
-                outputClearPrint(stderr);
+                outputPrint(stderr);
                 return;
             }
 
@@ -338,13 +346,13 @@ const COMMANDS = {
             const lines = stdout.split("\n");
             let pemuError = null;
             
-            for (const line of lines) {
-                pemuError = PEMUError.createFromString(line);
+            for (let i = lines.length - 1; i >= 0; i--) {
+                pemuError = PEMUError.createFromString(lines[i]);
                 if (pemuError !== null) break;
             }
             
             if (pemuError === null) {
-                outputClearPrint(stdout.length > 0 ? stdout : PEMU_UNSUPPORTED_COMMAND);
+                outputPrint(stdout.length > 0 ? stdout : PEMU_UNSUPPORTED_COMMAND);
             } else {
                 const settings = vscode.workspace.getConfiguration(EXTENSION_NAME);
                 if (settings.get("gotoError")) {
@@ -366,7 +374,7 @@ const COMMANDS = {
                     }
                 }
 
-                outputClearPrint(
+                outputPrint(
                     pemuError.toString()
                 );
             }
@@ -377,10 +385,10 @@ const COMMANDS = {
         if (!await checkPEMUVersion()) return;
         await runFileWithPEMU(filePath, null, false, async (err, stdout, stderr) => {
             if (err !== null) {
-                outputClearPrint(err);
+                outputPrint(err);
                 outputPrint(stderr);
             } else if (stderr.length > 0) {
-                outputClearPrint(stderr);
+                outputPrint(stderr);
             }
         });
     },
