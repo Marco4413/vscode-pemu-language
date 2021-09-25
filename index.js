@@ -5,8 +5,8 @@ const fs = require("fs");
 const PACKAGE = require("./package.json");
 
 // [ MIN_VER, MAX_VER ]
-// Planning to not break anything until 1.13.0, don't even know if we'll get there
-const EXTENSION_SUPPORTED_PEMU_VERSIONS = [ "1.12.0", "1.12.99" ];
+// TODO: Change "1.12.0" to "1.13.0" when the latter is released
+const EXTENSION_SUPPORTED_PEMU_VERSIONS = [ "1.12.0", "1.13.99" ];
 
 const PEMU_RELEASES_PAGE = "https://github.com/hds536jhmk/ProcessorEmulator/releases";
 const EXTENSION_LOW_VERSION = `

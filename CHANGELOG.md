@@ -3,6 +3,12 @@
 
 All notable changes to the PEMU Language Extension will be documented in this file.
 
+## [?]
+
+### Added
+
+ - Support for the new PEMU Instructions: SHL, SHR, ROL, ROR
+
 ## [0.6.0]
 
 ### Added
