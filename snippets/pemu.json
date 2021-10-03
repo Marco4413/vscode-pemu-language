@@ -24,14 +24,14 @@
             " ; @Min-Clock : ${3:Min Clock To Run Properly}"
         ]
     },
-    "Document Constant": {
-        "prefix": "!doc_constant",
-        "description": "Creates Documentation for a Constant",
+    "Document Compiler Variable": {
+        "prefix": "!doc_cvar",
+        "description": "Creates Documentation for a Compiler Variable",
         "body": [
             ";;",
-            " ; @Constant { ${1|Any,Number,Character,VirtualKey|} }",
-            " ; @Name: ${2:${TM_SELECTED_TEXT:Constant's Name}}",
-            " ; @Description: ${3:Constant's Description}"
+            " ; @CompilerVariable { ${1|Any,Number,Character,VirtualKey|} }",
+            " ; @Name: ${2:${TM_SELECTED_TEXT:Compiler Variable's Name}}",
+            " ; @Description: ${3:Compiler Variable's Description}"
         ]
     },
     "Document Library Setting": {

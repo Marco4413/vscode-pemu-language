@@ -9,6 +9,14 @@ All notable changes to the PEMU Language Extension will be documented in this fi
 
  - Support for the new PEMU Instructions: SHL, SHR, ROL, ROR
 
+### Improved
+
+ - Syntax
+
+### Changed
+
+ - Constants renamed to Compiler Variables
+
 ## [0.6.0]
 
 ### Added
