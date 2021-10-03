@@ -359,7 +359,7 @@ const COMMANDS = {
                     const errorPos = pemuError.getPosition();
                     const fileName = pemuError.getFileName();
                     if (errorPos !== null && fileName !== null) {
-                        const fileMatches = await vscode.workspace.findFiles("*/" + fileName, undefined, 1);
+                        const fileMatches = await vscode.workspace.findFiles("**/" + fileName, undefined, 1);
                         if (fileMatches.length > 0) {
                             const sourceFile = fileMatches[0];
                             const sourceDocument = await vscode.workspace.openTextDocument(sourceFile);

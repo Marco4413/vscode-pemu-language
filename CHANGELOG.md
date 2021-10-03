@@ -17,6 +17,10 @@ All notable changes to the PEMU Language Extension will be documented in this fi
 
  - Constants renamed to Compiler Variables
 
+### Fixed
+
+ - Goto Error not working
+
 ## [0.6.0]
 
 ### Added
