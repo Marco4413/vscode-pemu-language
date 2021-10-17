@@ -22,6 +22,10 @@ All notable changes to the PEMU Language Extension will be documented in this fi
 
  - Goto Error not working
 
+### Removed
+
+ - plugin.info File Support
+
 ## [0.6.0]
 
 ### Added

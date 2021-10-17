@@ -105,16 +105,6 @@
                 "configuration": "./languages/pemu.json"
             },
             {
-                "id": "pemu_plugin_info",
-                "aliases": [
-                    "PEMU Plugin Info"
-                ],
-                "filenames": [
-                    "plugin.info"
-                ],
-                "configuration": "./languages/pemu_keyvaluedata.json"
-            },
-            {
                 "id": "pemu_lang",
                 "aliases": [
                     "PEMU Language File"
@@ -132,11 +122,6 @@
                 "path": "./languages/pemu.syntax.json"
             },
             {
-                "language": "pemu_plugin_info",
-                "scopeName": "source.pemu.keyvaluedata",
-                "path": "./languages/pemu_keyvaluedata.syntax.json"
-            },
-            {
                 "language": "pemu_lang",
                 "scopeName": "source.pemu.keyvaluedata",
                 "path": "./languages/pemu_keyvaluedata.syntax.json"
@@ -146,10 +131,6 @@
             {
                 "language": "pemu",
                 "path": "./snippets/pemu.json"
-            },
-            {
-                "language": "pemu_plugin_info",
-                "path": "./snippets/pemu_plugin_info.json"
             },
             {
                 "language": "pemu_lang",
