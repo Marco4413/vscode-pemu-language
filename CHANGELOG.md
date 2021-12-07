@@ -9,6 +9,7 @@ All notable changes to the PEMU Language Extension will be documented in this fi
 
  - Support for the new PEMU Instructions: SHL, SHR, ROL, ROR, PUSHD
  - Support for underscores between digits within numbers
+ - Support for PEMU Math Expressions
 
 ### Improved
 

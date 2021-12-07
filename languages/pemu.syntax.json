@@ -12,7 +12,7 @@
 			"include": "#labels"
 		},
 		{
-			"include": "#numbers"
+			"include": "#integers"
 		},
 		{
 			"include": "#strings"
@@ -37,6 +37,9 @@
 		},
 		{
 			"include": "#registers"
+		},
+		{
+			"include": "#math_expressions"
 		},
 		{
 			"include": "#identifier"
@@ -101,7 +104,7 @@
 			"name": "keyword.operator.assignment",
 			"match": ":"
 		},
-		"numbers": {
+		"integers": {
 			"name": "constant.numeric",
 			"patterns": [
 				{
@@ -124,6 +127,25 @@
 							"name": "keyword.operator.decrement"
 						}
 					}
+				}
+			]
+		},
+		"float": {
+			"name": "constant.numeric.decimal",
+			"match": "\\b[0-9]*(\\.)[0-9]+\\b",
+			"captures": {
+				"1": {
+					"name": "meta.delimiter.decimal.period"
+				}
+			}
+		},
+		"numbers": {
+			"patterns": [
+				{
+					"include": "#integers"
+				},
+				{
+					"include": "#float"
 				}
 			]
 		},
@@ -194,7 +216,7 @@
 					"include": "#comments"
 				},
 				{
-					"include": "#numbers"
+					"include": "#integers"
 				},
 				{
 					"include": "#registers"
@@ -217,12 +239,19 @@
 			]
 		},
 		"offsets": {
-			"name": "meta.brace.square",
-			"begin": "\\[",
-			"end": "\\]",
+			"begin": "(\\[)",
+			"end": "(\\])",
+			"captures": {
+				"0": {
+					"name": "meta.block"
+				},
+				"1": {
+					"name": "meta.brace.square"
+				}
+			},
 			"patterns": [
 				{
-					"include": "#numbers"
+					"include": "#integers"
 				},
 				{
 					"include": "#characters"
@@ -246,6 +275,81 @@
 				{
 					"name": "keyword.flag",
 					"match": "\\b(ZF|CF)\\b"
+				}
+			]
+		},
+		"math_mono_operators_symbols": {
+			"name": "keyword.operator.arithmetic",
+			"match": "[+\\-*/%~]"
+		},
+		"math_mono_operators_ids": {
+			"name": "entity.name.function",
+			"match": "(?:abs|sqrt|log2|log)"
+		},
+		"math_bi_operators_symbols": {
+			"name": "keyword.operator.arithmetic",
+			"match": "(?:<<|>>|\\||&|\\^)"
+		},
+		"math_bi_operators_ids": {
+			"name": "entity.name.function",
+			"match": "(?:pow)"
+		},
+		"math_scope": {
+			"begin": "(\\()",
+			"end": "(\\))",
+			"captures": {
+				"0": {
+					"name": "meta.block"
+				},
+				"1": {
+					"name": "meta.brace.round"
+				}
+			},
+			"patterns": [
+				{
+					"include": "#math_literals"
+				}
+			]
+		},
+		"math_literals": {
+			"patterns": [
+				{
+					"include": "#numbers"
+				},
+				{
+					"include": "#math_scope"
+				},
+				{
+					"include": "#math_mono_operators_symbols"
+				},
+				{
+					"include": "#math_mono_operators_ids"
+				},
+				{
+					"include": "#math_bi_operators_symbols"
+				},
+				{
+					"include": "#math_bi_operators_ids"
+				},
+				{
+					"include": "#compiler_variables"
+				}
+			]
+		},
+		"math_expressions": {
+			"begin": "%(\\{)",
+			"end": "(\\})",
+			"captures": {
+				"0": {
+					"name": "meta.block"
+				},
+				"1": {
+					"name": "meta.brace.curly"
+				}
+			},
+			"patterns": [
+				{
+					"include": "#math_literals"
 				}
 			]
 		},
