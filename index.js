@@ -8,7 +8,7 @@ const PACKAGE = require("./package.json");
 // TODO: Change "1.12.0" to "1.13.0" when the latter is released
 const EXTENSION_SUPPORTED_PEMU_VERSIONS = [ "1.12.0", "1.13.99" ];
 
-const PEMU_RELEASES_PAGE = "https://github.com/hds536jhmk/ProcessorEmulator/releases";
+const PEMU_RELEASES_PAGE = "https://github.com/Marco4413/ProcessorEmulator/releases";
 const EXTENSION_LOW_VERSION = `
 The PEMU version in use is old ({0}), and not supported, please update it to {1}
  - ${PEMU_RELEASES_PAGE}

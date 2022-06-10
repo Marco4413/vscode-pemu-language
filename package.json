@@ -4,17 +4,17 @@
     "displayName": "PEMU Language Extension",
     "description": "An Extension which adds support for the PEMU Programming Language",
     "version": "0.6.0",
-    "homepage": "https://github.com/hds536jhmk/vscode-pemu-language",
+    "homepage": "https://github.com/Marco4413/vscode-pemu-language",
     "license": "MIT",
     "icon": "icon.png",
     "main": "./index.js",
     "author": {
-        "name": "hds536jhmk",
-        "url": "https://github.com/hds536jhmk"
+        "name": "Marco4413",
+        "url": "https://github.com/Marco4413"
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/hds536jhmk/vscode-pemu-language.git"
+        "url": "https://github.com/Marco4413/vscode-pemu-language.git"
     },
     "engines": {
         "vscode": "^1.58.0"
@@ -50,7 +50,7 @@
                 },
                 "pemu-language-extension.pemuArguments": {
                     "type": "string",
-                    "default": "--plugin \"io.github.hds.pemu:default_processor\" --language \"en-us\"",
+                    "default": "--plugin \"io.github.marco4413.pemu:default_processor\" --language \"en-us\"",
                     "description": "Arguments to be used when running PEMU, use this only to change active language or plugin."
                 },
                 "pemu-language-extension.gotoError": {
